@@ -1,15 +1,44 @@
 const Imap = require('imap');
 const { simpleParser } = require('mailparser');
 
-const imapConfig = {
-    user: 'your-email@example.com',
-    password: 'your-password',
-    host: 'imap.example.com',
-    port: 993,
-    tls: true
-};
+const imapConfig = {};
 
-const getEmails = () => {
+// Функция для отправки данных формы
+document.getElementById('saveButton').addEventListener('click', sendFormData);
+
+function sendFormData() {
+    const server = document.getElementById('serverInput').value;
+    const login = document.getElementById('loginInput').value;
+    const password = document.getElementById('passwordInput').value;
+
+    imapConfig.host = server;
+    imapConfig.user = login;
+    imapConfig.password = password;
+    // imapConfig.port = ;
+    // imapConfig.tls = ;
+
+    console.log('IMAP Config:', imapConfig);
+
+    fetch('/imap', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(imapConfig),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+    getEmails();
+}
+
+// Функция для получения писем
+function getEmails() {
     const imap = new Imap(imapConfig);
 
     imap.once('ready', () => {
@@ -71,6 +100,4 @@ const getEmails = () => {
     });
 
     imap.connect();
-};
-
-getEmails();
+}
