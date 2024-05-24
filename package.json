@@ -24,11 +24,13 @@
   },
   "keywords": [],
   "author": {
-    "name": "tuesday",
-    "email": "tuesday@weeks.team"
+    "name": "Rxflex",
+    "email": "andriizuew@icloud.com"
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
+    "electron-squirrel-startup": "^1.0.1",
+    "emailjs-imap-client": "^3.1.0",
+    "mailparser": "^3.7.1"
   }
 }
