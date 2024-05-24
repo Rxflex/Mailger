@@ -1,3 +1,6 @@
+mod imap;
+mod smtp;
+
 #[tauri::command]
 async fn fetch_emails_command(user: &str, password: &str, imap_server: &str) -> Result<Vec<String>, String> {
     match imap::connect_to_imap(user, password, imap_server).await {

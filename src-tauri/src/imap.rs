@@ -1,9 +1,9 @@
 use async_imap::Session;
 use async_imap::error::Result;
-use async_native_tls::TlsConnector;
 use tokio::net::TcpStream;
+use tokio_native_tls::TlsConnector;
+use native_tls::TlsStream;
 use async_imap::types::Fetch;
-use async_native_tls::TlsStream;
 
 pub async fn connect_to_imap(user: &str, password: &str, imap_server: &str) -> Result<Session<TlsStream<TcpStream>>> {
     let tls = TlsConnector::new();
