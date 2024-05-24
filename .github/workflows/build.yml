@@ -34,30 +34,3 @@ jobs:
             *.dmg
             *.rpm
             *.deb
-
-      - name: Create release draft
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: true
-          prerelease: false
-
-      - name: Upload release assets
-        id: upload-release-assets
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: |
-            *.zip
-            *.AppImage
-            *.exe
-            *.dmg
-            *.rpm
-            *.deb
-          asset_name: ${{ github.sha }}-${{ matrix.os }}-${{ github.run_number }}-${{ github.event_name }}-${{ github.run_id }}
