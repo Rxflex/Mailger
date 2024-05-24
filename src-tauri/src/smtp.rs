@@ -1,7 +1,7 @@
-use lettre::Message;
+use lettre::message::Message;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::transport::smtp::AsyncSmtpTransport;
-use lettre::Tokio1Executor;
+use lettre::transport::smtp::Tokio1Executor;
 
 pub async fn send_email(user: &str, password: &str, smtp_server: &str, recipient: &str, subject: &str, body: &str) -> Result<(), Box<dyn std::error::Error>> {
     let email = Message::builder()
