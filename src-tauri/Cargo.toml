@@ -14,8 +14,8 @@ tauri-build = { version = "1", features = [] }
 tauri = { version = "1", features = ["shell-open"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-lettre = "0.10.0-rc.3"  # Для SMTP
-async-imap = "0.9.7"  # Для IMAP, последняя доступная версия на момент написания
+lettre = { version = "0.10.4", features = ["tokio1"] }  # Включаем фичу "tokio1"
+async-imap = "0.9.7"  # Последняя доступная версия на момент написания
 tokio = { version = "1", features = ["full"] }  # Для асинхронных операций
 tokio-native-tls = "0.3"  # Для TLS
 

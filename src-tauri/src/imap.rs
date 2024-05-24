@@ -1,12 +1,12 @@
-use async_imap::Session;
 use async_imap::error::Result;
+use async_imap::Session;
+use async_imap::types::Fetch;
 use tokio::net::TcpStream;
 use tokio_native_tls::TlsConnector;
-use native_tls::TlsStream;
-use async_imap::types::Fetch;
+use tokio_native_tls::TlsStream;
 
 pub async fn connect_to_imap(user: &str, password: &str, imap_server: &str) -> Result<Session<TlsStream<TcpStream>>> {
-    let tls = TlsConnector::new();
+    let tls = tokio_native_tls::TlsConnector::from(native_tls::TlsConnector::builder().build()?);
     let client = async_imap::connect((imap_server, 993), imap_server, tls).await?;
     let mut session = client.login(user, password).await.map_err(|e| e.0)?;
     Ok(session)

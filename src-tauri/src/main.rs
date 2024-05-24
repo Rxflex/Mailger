@@ -5,7 +5,7 @@ mod smtp;
 async fn fetch_emails_command(user: &str, password: &str, imap_server: &str) -> Result<Vec<String>, String> {
     match imap::connect_to_imap(user, password, imap_server).await {
         Ok(mut session) => match imap::fetch_emails(&mut session).await {
-            Ok(emails) => Ok(emails.into_iter().map(|msg| String::from_utf8_lossy(msg.message().unwrap()).to_string()).collect()),
+            Ok(emails) => Ok(emails.into_iter().map(|msg| String::from_utf8_lossy(&msg.message).to_string()).collect()),
             Err(e) => Err(e.to_string()),
         },
         Err(e) => Err(e.to_string()),
