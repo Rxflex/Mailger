@@ -15,10 +15,9 @@ tauri = { version = "1", features = ["shell-open"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 lettre = "0.10.0-rc.3"  # Для SMTP
-async-imap = "3.1"  # Для IMAP
+async-imap = "0.9.7"  # Для IMAP, последняя доступная версия на момент написания
 tokio = { version = "1", features = ["full"] }  # Для асинхронных операций
 tokio-native-tls = "0.3"  # Для TLS
-
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
