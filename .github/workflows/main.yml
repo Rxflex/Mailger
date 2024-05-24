@@ -27,6 +27,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
 
       - name: setup node
         uses: actions/setup-node@v4
@@ -46,25 +47,6 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
         # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
         # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
-
-      - name: install Bun on macOS
-        if: matrix.platform == 'macos-latest'
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          source $HOME/.bashrc
-
-      - name: install Bun on Ubuntu
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          source $HOME/.bashrc
-
-      - name: install Bun on Windows
-        if: matrix.platform == 'windows-latest'
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          setx BUN_INSTALL "%USERPROFILE%\.bun"
-          setx PATH "%BUN_INSTALL%\bin;%PATH%"
 
       - name: install frontend dependencies
         run: bun install
