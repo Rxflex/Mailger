@@ -35,14 +35,29 @@ jobs:
             *.rpm
             *.deb
 
-      - name: Get tag name
-        id: tag_name
-        run: echo ::set-output name=TAG_NAME::${GITHUB_REF#refs/tags/}
-
       - name: Create release draft
-        run: |
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.github_token }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
-            -d '{"tag_name": "${{ steps.tag_name.outputs.TAG_NAME }}", "name": "Release ${{ steps.tag_name.outputs.TAG_NAME }}", "draft": true, "prerelease": false}'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: false
+
+      - name: Upload release assets
+        id: upload-release-assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: |
+            *.zip
+            *.AppImage
+            *.exe
+            *.dmg
+            *.rpm
+            *.deb
+          asset_name: ${{ github.sha }}-${{ matrix.os }}-${{ github.run_number }}-${{ github.event_name }}-${{ github.run_id }}
