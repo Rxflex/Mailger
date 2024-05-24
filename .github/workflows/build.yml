@@ -34,3 +34,4 @@ jobs:
             *.zip
             *.AppImage
             *.exe
+            *.dmg
