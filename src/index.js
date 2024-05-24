@@ -29,24 +29,8 @@ function createWindow() {
 // Обработчик события "app ready"
 app.on('ready', createWindow);
 
-// Проверка, авторизован ли пользователь
-ipcMain.on('check-authentication', (event, isAuthenticated) => {
-  if (!isAuthenticated) {
-    // Если пользователь не авторизован, показываем страницу приветствия
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'welcome.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-  }
-});
+/*
+TODO: Система авторизации
+TODO: Сохранение и проверка учетных данных
 
-ipcMain.on('open-login-page', () => {
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'login.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
-});
-
-// Остальные обработчики событий...
+ */
