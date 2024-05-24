@@ -3,6 +3,9 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const url = require('url');
+let Datastore = require('nedb')
+    , db = new Datastore({ filename: 'database.mg', autoload: true });
+
 let mainWindow;
 
 // Функция для создания главного окна приложения
