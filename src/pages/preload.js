@@ -1,4 +1,4 @@
-const { ipcRenderer, dialog } = require("electron");
+const { ipcRenderer} = require("electron");
 
 function sendToBackend(page) {
     let inputsraw, index;
@@ -14,6 +14,6 @@ ipcRenderer.on('response', (event, message) => {
     eval(message);
 })
 
-ipcRenderer.on('alert', (event, message) => {
-    alert(message);
+ipcRenderer.on('alert', (event, title, message) => {
+    window.api.messageMain("alert", title, message)
 })

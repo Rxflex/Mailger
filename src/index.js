@@ -1,5 +1,6 @@
 // src\index.js
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, ipcRenderer} = require('electron');
+
 const path = require('node:path');
 const url = require('url');
 let mainWindow;
@@ -42,6 +43,17 @@ async function createWindow() {
 }
 
 app.on('ready', createWindow);
+
+ipcMain.on("alert", (event, title, message) => {
+  const options = {
+    type: "error",
+    buttons: ["Okay"],
+    title: title,
+    message: message
+  }
+  dialog.showMessageBox(mainWindow, options)
+  console.log('Error: ' + message);
+})
 
 /*
 TODO: Система авторизации
