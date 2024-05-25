@@ -1,21 +1,20 @@
-// main.js
-
+// src\index.js
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const url = require('url');
-let Datastore = require('nedb')
-    , db = new Datastore({ filename: 'database.mg', autoload: true });
-
 let mainWindow;
 
-// Функция для создания главного окна приложения
+const pageHandler = require('./utils/pageHandler');
+
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1400,
+    height: 800,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+      contextIsolation: false
+    },
+    autoHideMenuBar: true,
   });
 
   mainWindow.loadURL(url.format({
@@ -27,9 +26,10 @@ function createWindow() {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
+
+  pageHandler.init(mainWindow);
 }
 
-// Обработчик события "app ready"
 app.on('ready', createWindow);
 
 /*
