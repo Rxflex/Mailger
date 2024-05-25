@@ -35,7 +35,8 @@ async function login(host, port, login, password, callback) {
         auth: {
             user: login,
             pass: password
-        }
+        },
+        logger: false
     });
 
     try {
@@ -66,7 +67,8 @@ async function auth() {
         auth: {
             user: config.login,
             pass: config.password
-        }
+        },
+        logger: false
     });
     await client.connect();
     memory.client = client;
@@ -98,7 +100,36 @@ async function getMails(mailbox) {
     }
 }
 
+async function getMailsWithContent(mailbox) {
+    let client;
+    try {
+        client = memory.client || await auth();
+        let lock = await client.getMailboxLock(mailbox);
+        let mailsWithContent = [];
+        try {
+            for await (let message of client.fetch('1:*', { envelope: true, source: true })) {
+                mailsWithContent.push({
+                    envelope: message.envelope,
+                    content: message.source.toString() // Получаем содержание сообщения
+                });
+            }
+        } finally {
+            lock.release();
+        }
+        return mailsWithContent;
+    } catch (error) {
+        console.error("Error fetching mails with content:", error);
+        throw error;
+    } finally {
+        if (client && memory.client) {
+            await client.logout();
+            memory.client = null;
+        }
+    }
+}
+
 module.exports = {
     login,
-    getMails
+    getMails,
+    getMailsWithContent
 };

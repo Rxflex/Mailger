@@ -13,7 +13,7 @@
 </head>
 <body class="antialiased bg-body text-body font-body">
     <div class="">
-    <form action="" onsubmit="sendToBackend('login')">
+    <form action="" onsubmit="window.electron.sendToBackend('login')">
       <section class="py-3"><div class="container px-4 mx-auto">
           <div class="relative py-12 px-6 bg-blue-500 rounded-2xl overflow-hidden">
             <img class="absolute top-0 left-0 h-full w-full object-cover" src="trizzle-assets/images/banner-triangle-circle-back.png" alt=""><div class="relative max-w-sm md:max-w-xl mx-auto text-center mb-12">
@@ -82,7 +82,6 @@
       </div>
     </form>
     </div>
-    <script src="preload.js"></script>
 </body>
 </html>
 
