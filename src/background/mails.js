@@ -1,6 +1,6 @@
 const imap = require("../libs/imap");
 const { db } = require("../libs/database");
-
+const { showNotification } = require("../utils/notification");
 async function getMails() {
     try {
         // Оборачиваем db.findOne в промис
@@ -20,6 +20,14 @@ async function getMails() {
         // Получаем новые письма с сервера
         const newMails = await imap.getMailsWithContent('INBOX');
 
+        if(existingMails.length === 0) {
+            db.insert({ _id: 'inbox', mails: newMails }, (err) => {
+                if (err) {
+                    console.error(err);
+                }
+            })
+        }
+
         // Определяем новые письма путем сравнения их ID с текущими данными
         const uniqueNewMails = newMails.filter(mail => !existingMails.some(existingMail => existingMail.messageId === mail.messageId));
 
@@ -31,6 +39,7 @@ async function getMails() {
                     if (err) {
                         reject(err);
                     } else {
+                        showNotification('New mails found', `New mails found: ${uniqueNewMails.length}`);
                         console.info('New mails added:', uniqueNewMails);
                         console.info('Document updated successfully');
                         resolve();
@@ -39,6 +48,7 @@ async function getMails() {
             });
         } else {
             console.info('No new mails found');
+            showNotification('No new mails', 'No new mails found');
         }
 
         // Возвращаем все письма
