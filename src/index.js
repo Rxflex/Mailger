@@ -1,5 +1,5 @@
 // src\index.js
-const { app, BrowserWindow, ipcMain, dialog, ipcRenderer} = require('electron');
+const { app, BrowserWindow, ipcMain, dialog} = require('electron');
 
 const path = require('node:path');
 const url = require('url');
@@ -7,7 +7,6 @@ let mainWindow;
 
 const pageHandler = require('./utils/pageHandler');
 const {checkAuth} = require("./utils/auth");
-const logger = require("./utils/logger");
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
@@ -38,7 +37,7 @@ async function createWindow() {
   })
 
 
-  pageHandler.init(mainWindow);
+  await pageHandler.init(mainWindow);
 }
 
 app.on('ready', createWindow);
