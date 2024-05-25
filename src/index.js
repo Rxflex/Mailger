@@ -20,24 +20,23 @@ async function createWindow() {
     autoHideMenuBar: true,
   });
 
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'pages/welcome.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
-
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
 
-  if (await checkAuth()) {
-    logger.redirect('dashboard');
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, '../pages/main.html'),
+  await checkAuth((auth)=>{
+    if(auth) mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, 'pages/main.html'),
       protocol: 'file:',
       slashes: true
     }));
-  }
+    else mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, 'pages/welcome.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+  })
+
 
   pageHandler.init(mainWindow);
 }
