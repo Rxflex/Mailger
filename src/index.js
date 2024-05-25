@@ -5,8 +5,10 @@ const url = require('url');
 let mainWindow;
 
 const pageHandler = require('./utils/pageHandler');
+const {checkAuth} = require("./utils/auth");
+const logger = require("./utils/logger");
 
-function createWindow() {
+async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
@@ -26,6 +28,15 @@ function createWindow() {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
+
+  if (await checkAuth()) {
+    logger.redirect('dashboard');
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, '../pages/main.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+  }
 
   pageHandler.init(mainWindow);
 }
