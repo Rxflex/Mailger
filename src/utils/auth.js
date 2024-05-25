@@ -4,11 +4,12 @@ const vars = {
     credentials: {},
 };
 
-async function checkAuth() {
+async function checkAuth(callback) {
     try {
-        const doc = await db.findOne({ _id: 'credentials' }).exec();
-        vars.credentials = doc || {};
-        return Object.keys(vars.credentials).length > 0;
+        db.findOne({ _id: 'credentials' }, (err, doc)=>{
+            vars.credentials = doc;
+            callback(Object.keys(vars.credentials).length > 0);
+        });
     } catch (err) {
         console.error('Error fetching credentials:', err);
         return false;
