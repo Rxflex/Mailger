@@ -7,7 +7,7 @@ const vars = {
 async function checkAuth(callback) {
     try {
         db.findOne({ _id: 'credentials' }, (err, doc)=>{
-            vars.credentials = doc;
+            vars.credentials = doc || {};
             callback(Object.keys(vars.credentials).length > 0);
         });
     } catch (err) {

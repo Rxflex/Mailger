@@ -7,37 +7,27 @@ let mainWindow;
 
 const pageHandler = require('./utils/pageHandler');
 const {checkAuth} = require("./utils/auth");
-
 async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      preload: path.join(__dirname, 'pages/preload.js'),
     },
     autoHideMenuBar: true,
   });
-
+  pageHandler.init(mainWindow);
+  pageHandler.initHandle(mainWindow);
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
 
-  await checkAuth((auth)=>{
-    if(auth) mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'pages/main.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-    else mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'pages/welcome.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-  })
-
-
-  await pageHandler.init(mainWindow);
+  await checkAuth((auth) => {
+    if (auth) mainWindow.loadFile(path.join(__dirname, 'pages/main.html'));
+    else mainWindow.loadFile(path.join(__dirname, 'pages/welcome.html'));
+  });
 }
 
 app.on('ready', createWindow);

@@ -1,4 +1,4 @@
-const { ipcRenderer} = require("electron");
+const { ipcRenderer, contextBridge} = require("electron");
 
 function sendToBackend(page) {
     let inputsraw, index;
@@ -17,3 +17,9 @@ ipcRenderer.on('response', (event, message) => {
 ipcRenderer.on('alert', (event, title, message) => {
     window.api.messageMain("alert", title, message)
 })
+
+contextBridge.exposeInMainWorld('electron', {
+    fetchMails: () => ipcRenderer.invoke('fetch-mails'),
+    mailParser: (args) => ipcRenderer.invoke('mail-parser', args),
+    sendToBackend: (page) => sendToBackend(page)
+});
