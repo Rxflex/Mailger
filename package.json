@@ -2,7 +2,7 @@
   "name": "mailger",
   "productName": "mailger",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Mailenger transforms your email client into a full-fledged messenger, blending email and instant messaging. Enjoy integrated chats, real-time notifications, group messaging, file sharing, and smart search. With encryption and cross-platform support, Mailenger ensures secure and efficient communication anywhere.",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -32,9 +32,11 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "2",
+    "electron-alert": "^0.1.20",
     "electron-squirrel-startup": "^1.0.1",
     "emailjs-imap-client": "^3.1.0",
     "imap": "^0.8.19",
+    "imapflow": "^1.0.162",
     "mailparser": "^3.7.1",
     "nedb": "^1.8.0"
   }

@@ -1,12 +1,15 @@
 // src\index.js
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, ipcRenderer} = require('electron');
+
 const path = require('node:path');
 const url = require('url');
 let mainWindow;
 
 const pageHandler = require('./utils/pageHandler');
+const {checkAuth} = require("./utils/auth");
+const logger = require("./utils/logger");
 
-function createWindow() {
+async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 800,
@@ -27,10 +30,30 @@ function createWindow() {
     mainWindow = null;
   });
 
+  if (await checkAuth()) {
+    logger.redirect('dashboard');
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, '../pages/main.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+  }
+
   pageHandler.init(mainWindow);
 }
 
 app.on('ready', createWindow);
+
+ipcMain.on("alert", (event, title, message) => {
+  const options = {
+    type: "error",
+    buttons: ["Okay"],
+    title: title,
+    message: message
+  }
+  dialog.showMessageBox(mainWindow, options)
+  console.log('Error: ' + message);
+})
 
 /*
 TODO: Система авторизации

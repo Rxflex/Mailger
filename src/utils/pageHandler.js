@@ -14,7 +14,7 @@ async function init(mainWindow) {
                     const filename = file.replace('.js', '');
                     console.log(`Page handler: ${filename}`);
                     ipcMain.on(filename, (event, ...args) => {
-                        require('../pages-handler/' + file)(mainWindow, event,args);
+                        require('../pages-handler/' + file)(mainWindow, ipcMain, event,args);
                     });
                 }}
     } catch (error) {
