@@ -6,6 +6,18 @@ module.exports = {
     asar: true,
   },
   rebuildConfig: {},
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'rxflex',
+          name: 'mailger'
+        },
+        prerelease: true
+      }
+    }
+  ]
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
