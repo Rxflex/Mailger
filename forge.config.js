@@ -17,7 +17,7 @@ module.exports = {
         prerelease: true
       }
     }
-  ]
+  ],
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
