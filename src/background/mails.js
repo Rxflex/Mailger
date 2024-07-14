@@ -3,7 +3,7 @@ const { db } = require("../libs/database");
 
 async function getMails() {
     try {
-        // Оборачиваем db.findOne в промис
+        // Wrap db.findOne into a promise
         const existingDoc = await new Promise((resolve, reject) => {
             db.findOne({ _id: 'inbox' }, (err, doc) => {
                 if (err) {
@@ -14,16 +14,16 @@ async function getMails() {
             });
         });
 
-        // Проверяем, существует ли документ и является ли поле mails массивом
+        // Check existence of document, and if it is a mail array
         const existingMails = (existingDoc && Array.isArray(existingDoc.mails)) ? existingDoc.mails : [];
 
-        // Получаем новые письма с сервера
+        // Parse new mails from server
         const newMails = await imap.getMailsWithContent('INBOX');
 
-        // Определяем новые письма путем сравнения их ID с текущими данными
+        // Identify new mails by comparison of their ID with current data
         const uniqueNewMails = newMails.filter(mail => !existingMails.some(existingMail => existingMail.messageId === mail.messageId));
 
-        // Если есть новые письма, записываем их в базу данных и отправляем уведомление
+        // If any new mails, write them to DB and send new notification
         if (uniqueNewMails.length > 0) {
             const updatedMails = [...existingMails, ...uniqueNewMails];
             await new Promise((resolve, reject) => {
@@ -41,7 +41,7 @@ async function getMails() {
             console.info('No new mails found');
         }
 
-        // Возвращаем все письма
+        // return all mails
         return existingMails.concat(uniqueNewMails);
     } catch (error) {
         console.error('Error fetching or updating mails:', error);
